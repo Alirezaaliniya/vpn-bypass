@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "account-record-cleaner"
+version = "1.0.0"
+description = "Backs up and removes the local 'expired account' record stored by the Windscribe Windows client."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+classifiers = [
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pyinstaller>=6"]
+
+[project.scripts]
+account-record-cleaner = "account_cleaner.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["account_cleaner*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

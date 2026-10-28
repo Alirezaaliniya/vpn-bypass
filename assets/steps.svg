@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="230" viewBox="0 0 1000 230" role="img" aria-label="4 steps">
+  <defs>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#18181b"/><stop offset="1" stop-color="#27272a"/>
+    </linearGradient>
+    <marker id="arrow" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0 0 L12 6 L0 12Z" fill="#71717a"/>
+    </marker>
+  </defs>
+  <style>
+    text{font-family:Vazirmatn,'Segoe UI',Tahoma,Arial,sans-serif;text-anchor:middle}
+    .t{font-size:22px;font-weight:700;fill:#fafafa}
+    .s{font-size:16px;fill:#a1a1aa}
+    .n{font-size:30px;font-weight:800;fill:#fafafa}
+    .flow{stroke:#71717a;stroke-width:3;stroke-dasharray:10 8;fill:none;animation:dash 1.2s linear infinite}
+    @keyframes dash{to{stroke-dashoffset:-36}}
+    .pop{animation:pop 6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+    .p2{animation-delay:1.2s}.p3{animation-delay:2.4s}.p4{animation-delay:3.6s}
+    @keyframes pop{0%,12%,100%{transform:scale(1)}6%{transform:scale(1.06)}}
+  </style>
+  <!-- RTL order: step 1 on the right -->
+  <g class="pop">   <rect x="760" y="40" width="210" height="150" rx="18" fill="url(#card)" stroke="#fafafa" stroke-opacity=".5"/>
+    <text x="865" y="80" class="n">۱</text><text x="865" y="116" class="t">دانلود</text><text x="865" y="146" class="s">exe از بخش Releases</text></g>
+  <g class="pop p2"><rect x="530" y="40" width="210" height="150" rx="18" fill="url(#card)" stroke="#fafafa" stroke-opacity=".5"/>
+    <text x="635" y="80" class="n">۲</text><text x="635" y="116" class="t">بستن ویندسکرایب</text><text x="635" y="146" class="s">یا تیک «Close» را بزنید</text></g>
+  <g class="pop p3"><rect x="300" y="40" width="210" height="150" rx="18" fill="url(#card)" stroke="#fafafa" stroke-opacity=".5"/>
+    <text x="405" y="80" class="n">۳</text><text x="405" y="116" class="t">یک کلیک</text><text x="405" y="146" class="s">Clear account record</text></g>
+  <g class="pop p4"><rect x="70" y="40" width="210" height="150" rx="18" fill="url(#card)" stroke="#fafafa" stroke-opacity=".7"/>
+    <text x="175" y="80" class="n" style="fill:#fafafa">✓</text><text x="175" y="116" class="t">تمام!</text><text x="175" y="146" class="s">ویندسکرایب را باز کنید</text></g>
+  <path class="flow" d="M758 115 H742" marker-end="url(#arrow)"/>
+  <path class="flow" d="M528 115 H512" marker-end="url(#arrow)"/>
+  <path class="flow" d="M298 115 H282" marker-end="url(#arrow)"/>
+</svg>

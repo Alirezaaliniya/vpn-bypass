@@ -1,3 +1,12 @@
 # Registry backups contain your encrypted account record - never commit them.
 backups/
 *.reg
+
+# Python / build output
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.venv/
