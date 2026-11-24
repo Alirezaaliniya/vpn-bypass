@@ -1,0 +1,30 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/build-exe.yml
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: AccountRecordCleaner-windows
+          path: dist
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/AccountRecordCleaner.exe
+            dist/AccountRecordCleaner-cli.exe
+            dist/SHA256SUMS.txt
+          body_path: .github/release-body.md
+          generate_release_notes: true

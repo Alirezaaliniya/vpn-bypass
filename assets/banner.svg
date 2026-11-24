@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="320" viewBox="0 0 1200 320" role="img" aria-label="Account Record Cleaner">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#09090b"/>
+      <stop offset="0.55" stop-color="#18181b"/>
+      <stop offset="1" stop-color="#3f3f46"/>
+      <animate attributeName="x2" values="1;0.6;1" dur="10s" repeatCount="indefinite"/>
+    </linearGradient>
+    <linearGradient id="title" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#fafafa"/>
+      <stop offset="1" stop-color="#a1a1aa"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#fafafa" stop-opacity="0.55"/>
+      <stop offset="1" stop-color="#fafafa" stop-opacity="0"/>
+    </radialGradient>
+    <clipPath id="round"><rect width="1200" height="320" rx="24"/></clipPath>
+  </defs>
+  <g clip-path="url(#round)">
+    <rect width="1200" height="320" fill="url(#bg)"/>
+    <!-- floating dots -->
+    <g fill="#ffffff" opacity="0.35">
+      <circle cx="90" cy="60" r="3"><animate attributeName="cy" values="60;40;60" dur="5s" repeatCount="indefinite"/></circle>
+      <circle cx="260" cy="250" r="2.5"><animate attributeName="cy" values="250;228;250" dur="6s" repeatCount="indefinite"/></circle>
+      <circle cx="520" cy="40" r="2"><animate attributeName="cy" values="40;62;40" dur="7s" repeatCount="indefinite"/></circle>
+      <circle cx="880" cy="270" r="3"><animate attributeName="cy" values="270;245;270" dur="5.5s" repeatCount="indefinite"/></circle>
+      <circle cx="1110" cy="70" r="2.5"><animate attributeName="cy" values="70;92;70" dur="6.5s" repeatCount="indefinite"/></circle>
+    </g>
+    <!-- waves -->
+    <path d="M0 270 C 200 230, 400 310, 600 270 S 1000 230, 1200 270 V320 H0Z" fill="#ffffff" opacity="0.06">
+      <animate attributeName="d" dur="8s" repeatCount="indefinite"
+        values="M0 270 C 200 230, 400 310, 600 270 S 1000 230, 1200 270 V320 H0Z;
+                M0 270 C 200 310, 400 230, 600 270 S 1000 310, 1200 270 V320 H0Z;
+                M0 270 C 200 230, 400 310, 600 270 S 1000 230, 1200 270 V320 H0Z"/>
+    </path>
+    <path d="M0 290 C 250 260, 450 320, 700 285 S 1050 260, 1200 290 V320 H0Z" fill="#ffffff" opacity="0.05">
+      <animate attributeName="d" dur="11s" repeatCount="indefinite"
+        values="M0 290 C 250 260, 450 320, 700 285 S 1050 260, 1200 290 V320 H0Z;
+                M0 290 C 250 320, 450 260, 700 295 S 1050 320, 1200 290 V320 H0Z;
+                M0 290 C 250 260, 450 320, 700 285 S 1050 260, 1200 290 V320 H0Z"/>
+    </path>
+    <!-- shield icon -->
+    <g transform="translate(160 160)">
+      <circle r="105" fill="url(#glow)">
+        <animate attributeName="r" values="95;115;95" dur="3.5s" repeatCount="indefinite"/>
+      </circle>
+      <path d="M0 -70 L56 -48 V6 C56 44 28 66 0 78 C-28 66 -56 44 -56 6 V-48Z"
+            fill="#09090b" stroke="#fafafa" stroke-width="5" stroke-linejoin="round"/>
+      <path d="M-24 4 L-6 22 L26 -16" fill="none" stroke="#fafafa" stroke-width="9"
+            stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="90" stroke-dashoffset="90">
+        <animate attributeName="stroke-dashoffset" values="90;0;0;90" keyTimes="0;0.35;0.85;1" dur="4s" repeatCount="indefinite"/>
+      </path>
+    </g>
+    <!-- text -->
+    <g font-family="Vazirmatn, 'Segoe UI', Tahoma, Arial, sans-serif" text-anchor="middle">
+      <text x="720" y="140" font-size="64" font-weight="800" fill="url(#title)">Account Record Cleaner</text>
+      <text x="720" y="196" font-size="28" fill="#e4e4e7" direction="rtl">پاک‌سازی رکورد حساب منقضی‌شده‌ی ویندسکرایب</text>
+      <text x="720" y="240" font-size="22" fill="#a1a1aa" direction="rtl">فقط با یک کلیک؛ همراه با بکاپ و امکان برگشت</text>
+    </g>
+  </g>
+</svg>

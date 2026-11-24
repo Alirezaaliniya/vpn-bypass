@@ -1,323 +1,253 @@
-<h1 align="center">Account Record Cleaner</h1>
-
 <p align="center">
-  <em>Removes the local "expired account" record the Windscribe Windows client stores in the registry.</em>
+  <img src="assets/banner.svg" alt="Account Record Cleaner" width="100%">
 </p>
 
 <p align="center">
-  <img alt="Platform" src="https://img.shields.io/badge/platform-Windows-0078D6?logo=windows&logoColor=white">
-  <img alt="PowerShell" src="https://img.shields.io/badge/PowerShell-5.1%2B-5391FE?logo=powershell&logoColor=white">
-  <img alt="Admin rights" src="https://img.shields.io/badge/admin%20rights-not%20required-brightgreen">
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue">
+  <a href="../../releases/latest"><img alt="دانلود" src="https://img.shields.io/badge/%E2%AC%87%EF%B8%8F_%D8%AF%D8%A7%D9%86%D9%84%D9%88%D8%AF_%D8%A2%D8%AE%D8%B1%DB%8C%D9%86_%D9%86%D8%B3%D8%AE%D9%87-18181b?style=for-the-badge&logo=windows&logoColor=white"></a>
 </p>
 
 <p align="center">
-  <a href="#english">English</a> &nbsp;&middot;&nbsp; <a href="#persian">فارسی</a>
+  <img alt="Release" src="https://img.shields.io/github/v/release/imhamiddev/vpn-bypass?style=flat-square&color=3f3f46">
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/imhamiddev/vpn-bypass/total?style=flat-square&color=18181b">
+  <img alt="Build" src="https://img.shields.io/github/actions/workflow/status/imhamiddev/vpn-bypass/release.yml?style=flat-square">
+  <img alt="Windows" src="https://img.shields.io/badge/Windows-10%20%7C%2011-0078D6?style=flat-square&logo=windows&logoColor=white">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3.9%2B-3776AB?style=flat-square&logo=python&logoColor=white">
+  <img alt="Admin" src="https://img.shields.io/badge/%D8%A8%D8%AF%D9%88%D9%86_%D9%86%DB%8C%D8%A7%D8%B2_%D8%A8%D9%87_Admin-22c55e?style=flat-square">
+  <img alt="License" src="https://img.shields.io/badge/license-MIT-blue?style=flat-square">
 </p>
+
+<div dir="rtl">
+
+## ✨ این ابزار چیه؟
+
+اگه موقع وصل‌شدن به **ویندسکرایب (Windscribe)** این پیام رو می‌بینی:
+
+> ❌ _Your original account `xxxx` has expired._
+> _Creating multiple accounts to bypass free tier limitations is prohibited._
+
+مشکل از رمز یا اینترنتت **نیست**. برنامه‌ی ویندسکرایب یه **رکورد محلی** روی همین کامپیوتر خودت ذخیره کرده (توی رجیستری ویندوز) و بر اساس اون جلوی اتصال رو می‌گیره.
+
+این ابزار همون رکورد رو **بکاپ می‌گیره و پاک می‌کنه**. همین. 🎯
+
+|     |                                                                                        |
+| --- | -------------------------------------------------------------------------------------- |
+| 🖱️  | یک پنجره‌ی ساده؛ بدون نصب، بدون دردسر                                                  |
+| 💾  | قبل از حذف، خودکار بکاپ می‌گیره                                                        |
+| ↩️  | با یک کلیک می‌تونی بکاپ رو برگردونی                                                    |
+| 🔒  | فقط **یک کلید** از رجیستری خودت رو دست می‌زنه؛ اینترنت نمی‌خواد، دسترسی Admin نمی‌خواد |
+| 🧪  | حالت آزمایشی (`--dry-run`) که چیزی رو تغییر نمی‌ده                                     |
+| 🌗  | رابط ساده و مینیمال با تم سیاه‌وسفید (روشن و تاریک، هماهنگ با ویندوز)                  |
+
+> [!IMPORTANT]
+> این ابزار فقط رکورد **روی کامپیوتر خودت** رو پاک می‌کنه. هیچ تغییری سمت سرور ویندسکرایب ایجاد نمی‌کنه و اشتراک هم فعال یا تمدید نمی‌کنه.
 
 ---
 
-<h2 id="english">English</h2>
+## 🚀 آموزش ۳ مرحله‌ای (ساده‌ترین روش)
 
-### What is this?
+</div>
 
-A small PowerShell utility that backs up and deletes the registry key in which the
-**Windscribe desktop client for Windows** records a *previously expired* free account.
+<p align="center">
+  <img src="assets/steps.svg" alt="مراحل استفاده" width="90%">
+</p>
 
-It touches **one key under `HKCU`** and nothing else. It is not a patch, a crack, or a
-modified client — it just removes a local record and keeps a `.reg` backup so you can put
-it back.
+<div dir="rtl">
 
-> [!IMPORTANT]
-> This is a local cleanup tool. It does **not** change anything on Windscribe's servers,
-> and it does not grant, extend, or restore any subscription. See [Limitations](#limitations).
+### مرحله ۱ — دانلود
 
-### The problem
+1. برو به صفحه‌ی **[Releases](../../releases/latest)**.
+2. فایل **`AccountRecordCleaner.exe`** رو دانلود کن (همونی که اسمش `-cli` نداره).
 
-When the client sees a free account whose status is expired (`status == 2`), it stores that
-account's `username`, `userId`, and `date` — encrypted — in the registry, under a key named
-to look like a stock Windows key:
+### مرحله ۲ — اجرا
 
-```
-HKCU\Software\Microsoft\Windows\CurrentVersion\NetControlPort
-    Version  REG_DWORD    0x1
-    State    REG_BINARY   <encrypted blob>
-```
+1. ویندسکرایب رو ببند (یا تیک «Close Windscribe first» رو بزن تا خودش ببنده).
+2. روی `AccountRecordCleaner.exe` **دابل‌کلیک** کن.
 
-On a later run, if the current account is free and differs from the stored record, the client
-enters `CONNECT_BLOCKED_MULTI_ACCOUNT` and shows:
+> [!NOTE]
+> ویندوز ممکنه بنر آبی **«Windows protected your PC»** نشون بده، چون برنامه امضای دیجیتال پولی نداره.
+> روی **More info** و بعد **Run anyway** بزن. سورس کامل همین‌جا باز و قابل بررسیه و exe با GitHub Actions ساخته می‌شه (پایین‌تر توضیح دادم چطور اصالتش رو چک کنی).
 
-> Your original account `<username>` has expired.
-> Creating multiple accounts to bypass free tier limitations is prohibited.
+### مرحله ۳ — یک کلیک
 
-The message is not about a wrong password or a broken connection — it is this local record.
+1. دکمه‌ی **Clear account record** رو بزن و تأیید کن.
+2. وقتی نوشت `Record deleted` ✅ کارت تمومه.
+3. ویندسکرایب رو دوباره باز کن و وصل شو.
 
-### Requirements
-
-- Windows 10 / 11
-- Windows PowerShell 5.1 (built in) or PowerShell 7+
-- No Administrator rights — the key lives under `HKCU`
-
-### Install
-
-```powershell
-git clone https://github.com/Alirezaaliniya/vpn-bypass.git
-cd vpn-bypass
-```
-
-Or download the repository as a ZIP and extract it anywhere.
-
-### Usage
-
-```powershell
-# Normal run — backs up, then deletes
-.\clear-account-record.ps1
-
-# Recommended: close the client first so the record isn't rewritten immediately
-.\clear-account-record.ps1 -KillClient
-
-# Skip the backup
-.\clear-account-record.ps1 -NoBackup
-
-# Custom backup location
-.\clear-account-record.ps1 -BackupDir D:\backups
-```
-
-Or just double-click **`clear-account-record.bat`**, which launches the script with
-`-ExecutionPolicy Bypass` and UTF-8 console output. Arguments pass straight through it:
-
-```bat
-clear-account-record.bat -KillClient
-```
-
-### What each run does
-
-1. If `-KillClient` was passed, terminates any `Windscribe` processes.
-2. If the key does not exist, reports "clean" and exits `0`. **Repeated runs are safe.**
-3. Prints the current key contents (`Version`, and a hex preview of `State`).
-4. Writes a `.reg` backup named `netcontrolport-YYYYMMDD-HHMMSS.reg`. If the backup fails,
-   **nothing is deleted** and it exits `1`.
-5. Deletes the key and verifies it is gone. If it still exists, exits `1`.
-
-| Exit code | Meaning |
-|---|---|
-| `0` | Key deleted, or no key was present |
-| `1` | Backup failed, or the key survived deletion |
-
-### Restoring
-
-Backups land in `backups/` next to the script (or wherever `-BackupDir` pointed).
-Pick the timestamp you want and import it:
-
-```powershell
-reg.exe import .\backups\netcontrolport-20260823-174900.reg
-```
-
-> [!WARNING]
-> `backups/` and `*.reg` are gitignored on purpose — a backup contains your encrypted
-> account record. Never commit one.
-
-### Repository layout
-
-| File | Description |
-|---|---|
-| [clear-account-record.ps1](clear-account-record.ps1) | The cleanup script |
-| [clear-account-record.bat](clear-account-record.bat) | Double-click launcher (bypasses ExecutionPolicy, sets UTF-8 output) |
-| [connection-error-fix.txt](connection-error-fix.txt) | Original analysis notes (Persian) |
-| `backups/` | Timestamped `.reg` backups — gitignored, created on first run |
-
-### Where this comes from
-
-The paths below live in the **upstream Windscribe client source**
-([Windscribe/Desktop-App](https://github.com/Windscribe/Desktop-App)) — they are not files in
-this repository. They are listed so the behaviour described above can be verified rather than
-taken on trust.
-
-| File | Role |
-|---|---|
-| `src/client/frontend/frontend-common/multipleaccountdetection/secretvalue_win.cpp` | Reads/writes/deletes the registry key (encrypted with a fixed key, `0xFA7234AAF37A31BE`) |
-| `src/client/frontend/gui/mainwindow.cpp` | The multi-account detection condition |
-| `src/client/frontend/frontend-common/blockconnect.cpp` | Builds the error message text |
-
-The detection fires when all of these hold: a previous free account with `status == 2` is on
-record, that record exists in local storage, the current account is free rather than premium,
-it differs from the stored one (compared by username or user ID), and it is otherwise active.
-
-### Limitations
-
-- **Not permanent.** `setValue()` recreates the same key whenever the client next sees an
-  expired account. Preventing that for good would require a code-level change around
-  `MultipleAccountDetection_win::userBecomeExpired()`.
-- **Local only.** It changes nothing server-side. If Windscribe has applied a restriction on
-  their end, this tool has no effect on it.
-- **Windows only.** macOS and Linux use `multipleaccountdetection_posix.cpp`, which stores the
-  record differently.
-
-### Disclaimer
-
-Published for research and educational purposes — documenting how a client-side detection
-mechanism stores state on your own machine, and how to inspect and reset it. Complying with
-Windscribe's Terms of Service is your responsibility. Not affiliated with or endorsed by
-Windscribe. No warranty; use at your own risk.
-
-### License
-
-MIT — see [LICENSE](LICENSE).
+> [!TIP]
+> اگه چیزی خراب شد، دکمه‌ی **Restore latest backup** آخرین بکاپ رو برمی‌گردونه.
 
 ---
 
-<div dir="rtl">
-
-<h2 id="persian">فارسی</h2>
-
-### این چیست؟
-
-یک اسکریپت کوچک PowerShell که از کلید رجیستریِ مربوط به رکورد حساب منقضی‌شده در کلاینت دسکتاپ Windscribe روی ویندوز بکاپ می‌گیرد و سپس آن را حذف می‌کند.
-
-فقط یک کلید زیر `HKCU` را دست می‌زند و نه چیز دیگری. نه پچ است، نه کرک، نه کلاینت دستکاری‌شده — صرفاً یک رکورد محلی را حذف می‌کند و بکاپ `.reg` نگه می‌دارد تا بتوانید برش گردانید.
-
-> [!IMPORTANT]
-> این ابزار فقط محلی است. هیچ تغییری در سمت سرور Windscribe ایجاد نمی‌کند و هیچ اشتراکی را تمدید یا فعال نمی‌کند. بخش محدودیت‌ها را ببینید.
-
-### مسئله
-
-وقتی کلاینت یک حساب رایگان با وضعیت منقضی (`status == 2`) ببیند، مشخصات آن حساب — `username`، `userId` و `date` — را به‌صورت رمزگذاری‌شده در رجیستری ذخیره می‌کند. اسم کلید طوری انتخاب شده که شبیه کلیدهای خود ویندوز به نظر برسد:
+## 🧠 پشت صحنه چه اتفاقی می‌افته؟
 
 </div>
 
-```
-HKCU\Software\Microsoft\Windows\CurrentVersion\NetControlPort
-    Version  REG_DWORD    0x1
-    State    REG_BINARY   <encrypted blob>
+```mermaid
+flowchart TD
+    A([▶ اجرای برنامه]) --> B{ویندسکرایب<br/>باز است؟}
+    B -- "بله، با گزینه‌ی Close" --> C[بستن تمیز برنامه<br/>و صبر تا بسته شدن کامل]
+    B -- نه --> D
+    C --> D{رکورد در رجیستری<br/>وجود دارد؟}
+    D -- نه --> E([✅ از قبل تمیز است])
+    D -- بله --> F[💾 گرفتن بکاپ از کلید]
+    F --> G{بکاپ موفق بود؟}
+    G -- نه --> H([⛔ توقف؛ هیچ چیز حذف نشد])
+    G -- بله --> I[🗑️ حذف کلید رجیستری]
+    I --> J{واقعاً حذف شد؟}
+    J -- بله --> K([✅ تمام!])
+    J -- نه --> L([❌ خطا با توضیح])
 ```
 
 <div dir="rtl">
 
-در اجرای بعدی، اگر حساب فعلی رایگان و متفاوت از رکورد ذخیره‌شده باشد، کلاینت وارد حالت `CONNECT_BLOCKED_MULTI_ACCOUNT` می‌شود و این پیام را نشان می‌دهد:
+### رکورد دقیقاً کجاست؟
 
 </div>
 
-> Your original account `<username>` has expired.
-> Creating multiple accounts to bypass free tier limitations is prohibited.
-
-<div dir="rtl">
-
-این پیام ربطی به اشتباه‌بودن رمز عبور یا قطع‌بودن اینترنت ندارد؛ علتش همین رکورد محلی است.
-
-### پیش‌نیازها
-
-- ویندوز ۱۰ یا ۱۱
-- ‏Windows PowerShell 5.1 (از قبل نصب است) یا PowerShell 7+
-- نیازی به دسترسی Administrator نیست — کلید زیر `HKCU` است
-
-### نصب
-
-</div>
-
-```powershell
-git clone https://github.com/Alirezaaliniya/vpn-bypass.git
-cd vpn-bypass
+```text
+HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\NetControlPort
+    Version   REG_DWORD    0x1
+    State     REG_BINARY   <داده‌ی رمزگذاری‌شده>
 ```
 
 <div dir="rtl">
 
-یا فایل ZIP مخزن را دانلود و در هر مسیری استخراج کنید.
+اسم این کلید عمداً شبیه کلیدهای خود ویندوز انتخاب شده؛ اما فقط همین یک کلید توسط این ابزار حذف می‌شه.
 
-### نحوه‌ی استفاده
+### چرا ویندسکرایب جلوی اتصال رو می‌گیره؟
 
 </div>
 
-```powershell
-# حالت عادی — بکاپ می‌گیرد و حذف می‌کند
-.\clear-account-record.ps1
-
-# توصیه‌شده: اول کلاینت را ببند تا رکورد بلافاصله دوباره نوشته نشود
-.\clear-account-record.ps1 -KillClient
-
-# بدون بکاپ
-.\clear-account-record.ps1 -NoBackup
-
-# مسیر دلخواه برای بکاپ
-.\clear-account-record.ps1 -BackupDir D:\backups
+```mermaid
+sequenceDiagram
+    autonumber
+    participant W as ویندسکرایب
+    participant R as رجیستری ویندوز
+    W->>R: حساب رایگانِ منقضی دیدم → مشخصاتش را (رمزگذاری‌شده) ذخیره کن
+    Note over W,R: چند وقت بعد، با حساب دیگری وارد می‌شوید
+    W->>R: رکورد قبلی را بخوان
+    R-->>W: حساب منقضی‌شده‌ی قبلی
+    W-->>W: حساب فعلی ≠ حساب ذخیره‌شده → CONNECT_BLOCKED_MULTI_ACCOUNT
+    Note over W: همان پیام خطایی که می‌بینید
 ```
 
 <div dir="rtl">
 
-یا کافی است روی `clear-account-record.bat` دابل‌کلیک کنید؛ این فایل اسکریپت را با `-ExecutionPolicy Bypass` و خروجی UTF-8 اجرا می‌کند. آرگومان‌ها را هم می‌توانید از همان طریق بدهید:
+---
 
-</div>
+## 🛠️ حالت پیشرفته (خط فرمان)
 
-```bat
-clear-account-record.bat -KillClient
-```
-
-<div dir="rtl">
-
-### هر بار اجرا چه اتفاقی می‌افتد
-
-۱. اگر `-KillClient` داده شده باشد، پروسه‌های `Windscribe` بسته می‌شوند.
-
-۲. اگر کلید وجود نداشته باشد، پیام «تمیز است» و خروج با کد `0`. اجرای مکرر بی‌خطر است.
-
-۳. محتوای فعلی کلید نمایش داده می‌شود (`Version` و پیش‌نمایش هگز `State`).
-
-۴. بکاپ `.reg` با نام `netcontrolport-YYYYMMDD-HHMMSS.reg` ساخته می‌شود. اگر بکاپ ناموفق باشد، حذف انجام نمی‌شود و خروج با کد `1`.
-
-۵. کلید حذف و حذف‌شدنش تأیید می‌شود. اگر هنوز موجود باشد، خروج با کد `1`.
-
-| کد خروج | معنی |
-|---|---|
-| `0` | کلید حذف شد، یا اصلاً وجود نداشت |
-| `1` | بکاپ ناموفق بود، یا کلید بعد از حذف باقی مانده |
-
-### بازگردانی
-
-بکاپ‌ها در پوشه‌ی `backups/` کنار اسکریپت ساخته می‌شوند (یا هر مسیری که به `-BackupDir` داده‌اید). تاریخ‌ومهر مورد نظر را انتخاب و import کنید:
+اگه با ترمینال راحتی، فایل **`AccountRecordCleaner-cli.exe`** رو بگیر:
 
 </div>
 
 ```powershell
-reg.exe import .\backups\netcontrolport-20260823-174900.reg
+AccountRecordCleaner-cli.exe --kill-client      # بستن ویندسکرایب + بکاپ + حذف
+AccountRecordCleaner-cli.exe --dry-run          # فقط نشون بده چی می‌شه، چیزی تغییر نکنه
+AccountRecordCleaner-cli.exe --restore          # برگردوندن جدیدترین بکاپ
+AccountRecordCleaner-cli.exe --list-backups     # لیست بکاپ‌ها
 ```
 
 <div dir="rtl">
+
+| گزینه              | کاربرد                                                                           |
+| ------------------ | -------------------------------------------------------------------------------- |
+| `--kill-client`    | اول به‌صورت تمیز می‌بنده، فقط در صورت نیاز اجباری، و صبر می‌کنه تا کامل بسته بشه |
+| `--no-backup`      | بدون بکاپ حذف کن (پیشنهاد نمی‌شه)                                                |
+| `--backup-dir DIR` | مسیر دلخواه برای بکاپ‌ها                                                         |
+| `--dry-run`        | فقط گزارش بده                                                                    |
+| `--restore [FILE]` | یک بکاپ رو برگردون (پیش‌فرض: جدیدترین)                                           |
+| `--list-backups`   | لیست بکاپ‌ها                                                                     |
+
+**کد خروج:** `0` موفق · `1` خطا (بکاپ، حذف یا بستن برنامه) · `2` ویندوز نیست.
+
+### 💾 بکاپ‌ها کجان؟
+
+کنار خود برنامه، توی پوشه‌ی `backups` با اسمی مثل `netcontrolport-20261029-004500.reg`.
+اگه اون پوشه قابل نوشتن نباشه، توی `%LOCALAPPDATA%\AccountRecordCleaner\backups` ذخیره می‌شه.
+بکاپ‌ها **هیچ‌وقت روی هم نوشته نمی‌شن**. اگه بکاپ ساخته نشه، **چیزی حذف نمی‌شه**.
 
 > [!WARNING]
-> پوشه‌ی `backups/` و فایل‌های `*.reg` عمداً در `.gitignore` هستند — هر بکاپ حاوی رکورد رمزگذاری‌شده‌ی حساب شماست. هرگز آن را commit نکنید.
+> فایل بکاپ شامل رکورد رمزگذاری‌شده‌ی حساب توئه. جایی آپلودش نکن.
 
-### ساختار مخزن
+---
 
-| فایل | توضیح |
-|---|---|
-| [clear-account-record.ps1](clear-account-record.ps1) | اسکریپت اصلی پاک‌سازی |
-| [clear-account-record.bat](clear-account-record.bat) | اجرا با دابل‌کلیک (ExecutionPolicy را دور می‌زند، خروجی را UTF-8 می‌کند) |
-| [connection-error-fix.txt](connection-error-fix.txt) | یادداشت‌های اولیه‌ی تحلیل |
-| `backups/` | بکاپ‌های `.reg` با تاریخ‌ومهر — در `.gitignore` است و در اولین اجرا ساخته می‌شود |
+## ❓ سوالات متداول و رفع مشکل
 
-### این اطلاعات از کجا آمده
+<details>
+<summary><b>بعد از پاک‌کردن، دوباره همون خطا اومد!</b></summary>
 
-مسیرهای زیر مربوط به سورس کلاینت Windscribe هستند ([Windscribe/Desktop-App](https://github.com/Windscribe/Desktop-App))، نه فایل‌های این مخزن. آورده شده‌اند تا رفتار توضیح‌داده‌شده قابل بررسی باشد.
+ویندسکرایب هر بار که دوباره یه حساب منقضی ببینه، رکورد رو از نو می‌سازه. پس ممکنه خطا برگرده. موقع اجرا ویندسکرایب رو **کامل ببند** (گزینه‌ی Close رو فعال بذار) و بعد از پاک‌کردن اجراش کن. اگه محدودیت سمت سرور اعمال شده باشه، این ابزار روش اثری نداره.
 
-| فایل | نقش |
-|---|---|
-| `src/client/frontend/frontend-common/multipleaccountdetection/secretvalue_win.cpp` | خواندن/نوشتن/حذف کلید رجیستری (رمزگذاری با کلید ثابت `0xFA7234AAF37A31BE`) |
-| `src/client/frontend/gui/mainwindow.cpp` | شرط تشخیص وضعیت چند-حسابی |
-| `src/client/frontend/frontend-common/blockconnect.cpp` | ساخت متن پیام خطا |
+</details>
 
-تشخیص وقتی فعال می‌شود که همه‌ی این شرط‌ها برقرار باشند: یک حساب رایگان قبلی با `status == 2` ثبت شده باشد، رکوردش در storage محلی موجود باشد، حساب فعلی رایگان (نه premium) باشد، با حساب ذخیره‌شده متفاوت باشد (مقایسه با username یا user ID)، و در غیر این صورت فعال باشد.
+<details>
+<summary><b>نوشت «No record found - already clean»</b></summary>
 
-### محدودیت‌ها
+یعنی رکوردی برای این حساب کاربری ویندوز پیدا نشده؛ یا قبلاً پاک شده، یا ویندسکرایب با حساب کاربری دیگه‌ای استفاده شده. اگه برنامه رو با «Run as administrator» و یک حساب Admin دیگه اجرا کردی، به‌جاش با حساب کاربری عادی خودت و بدون Admin اجراش کن.
 
-- دائمی نیست. تابع `setValue()` هر بار که کلاینت دوباره یک حساب منقضی ببیند، همین کلید را از نو می‌سازد. برای جلوگیری دائمی باید در سطح کد جلوی `MultipleAccountDetection_win::userBecomeExpired()` گرفته شود.
-- فقط محلی است. هیچ تغییری در وضعیت سمت سرور Windscribe ایجاد نمی‌کند. اگر محدودیتی سمت سرور اعمال شده باشد، این ابزار تأثیری روی آن ندارد.
-- فقط ویندوز. روی macOS و لینوکس از `multipleaccountdetection_posix.cpp` استفاده می‌شود که مکانیزم ذخیره‌سازی متفاوتی دارد.
+</details>
 
-### سلب مسئولیت
+<details>
+<summary><b>ویندوز می‌گه برنامه ناشناخته‌ست (SmartScreen)</b></summary>
 
-این مخزن با هدف پژوهشی و آموزشی منتشر شده است — مستندسازی این‌که یک مکانیزم تشخیص سمت-کلاینت چطور روی دستگاه خودتان اطلاعات ذخیره می‌کند و چطور می‌شود آن را بررسی و ریست کرد. رعایت شرایط استفاده‌ی (ToS) شرکت Windscribe بر عهده‌ی خود شماست. این پروژه هیچ وابستگی یا تأییدی از سوی Windscribe ندارد. بدون هیچ ضمانتی ارائه می‌شود؛ مسئولیت استفاده با شماست.
+More info ← Run anyway. اگه نگرانی، چک‌سام فایل رو با `SHA256SUMS.txt` مقایسه کن:
 
-### لایسنس
+```powershell
+Get-FileHash .\AccountRecordCleaner.exe -Algorithm SHA256
+```
 
-MIT — فایل [LICENSE](LICENSE) را ببینید.
+</details>
+
+<details>
+<summary><b>آنتی‌ویروس هشدار داد</b></summary>
+
+برنامه‌هایی که با PyInstaller ساخته می‌شن گاهی هشدار الکی (false positive) می‌گیرن. سورس کامل و workflowی که exe رو می‌سازه توی همین مخزنه؛ می‌تونی خودت هم بررسی و بسازیش.
+
+</details>
+
+<details>
+<summary><b>می‌خوام بکاپ رو دستی برگردونم</b></summary>
+
+روی فایل `.reg` دابل‌کلیک کن و تأیید کن، یا:
+
+```powershell
+reg import .\backups\netcontrolport-20261029-004500.reg
+```
+
+</details>
+
+---
+
+## 🔍 شفافیت و امنیت
+
+- ✅ **سورس باز** و کوچک؛ فقط یک کلید زیر `HKCU` رو می‌خونه/حذف می‌کنه.
+- ✅ **بدون اینترنت**؛ برنامه هیچ داده‌ای نمی‌فرسته.
+- ✅ فایل exe با **GitHub Actions** از همین سورس ساخته می‌شه (`.github/workflows/release.yml`) و در Release فایل `SHA256SUMS.txt` هست تا اصالتش رو چک کنی.
+- ✅ ۴۰+ تست خودکار روی منطق برنامه.
+
+---
+
+## ⚠️ محدودیت‌ها
+
+- **دائمی نیست:** اگه ویندسکرایب دوباره حساب منقضی ببینه، کلید رو از نو می‌سازه.
+- **فقط محلی:** وضعیت سمت سرور ویندسکرایب تغییر نمی‌کنه.
+- **فقط ویندوز:** در macOS و لینوکس رکورد جور دیگه‌ای ذخیره می‌شه.
+
+## 📜 سلب مسئولیت
+
+این پروژه برای اهداف **پژوهشی و آموزشی** منتشر شده و نشون می‌ده یک مکانیزم تشخیص سمت-کلاینت چطور روی دستگاه خودت داده ذخیره می‌کنه. رعایت شرایط استفاده (ToS) ویندسکرایب با خودته. این پروژه هیچ ارتباط یا تأییدی از طرف Windscribe نداره و بدون هیچ ضمانتیه؛ مسئولیت استفاده با خودته.
+
+## ⭐ حمایت
+
+اگه به کارت اومد، یه ⭐ به مخزن بده و دوستانت رو هم باخبر کن.
 
 </div>
+
+<p align="center">
+  <a href="https://star-history.com/#imhamiddev/vpn-bypass&Date">
+    <img src="https://api.star-history.com/svg?repos=imhamiddev/vpn-bypass&type=Date" alt="Star History" width="60%">
+  </a>
+</p>
+
+<p align="center"><sub>لایسنس MIT · ساخته‌شده با ❤️</sub></p>
